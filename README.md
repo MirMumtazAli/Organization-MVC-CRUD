@@ -25,7 +25,11 @@ An **Employee Management System (EMS)** developed using **ASP.NET Core MVC** tha
 - **Razor Views**
 
 ---
+## 📄 Project Documentation
 
+[📘 View Employee Management System (EMS) PDF](docs/Employee Management System.pdf)
+
+---
 ## 🧩 Project Structure
 
 - **Models** – Employee entity and data models  
