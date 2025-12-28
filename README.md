@@ -28,10 +28,15 @@
 ## 🖼️ Project Screenshots
 
 ![Screenshot 2](screenshots/Employee%20Management%20System_page-0002.jpg)
+--
 ![Screenshot 3](screenshots/Employee%20Management%20System_page-0003.jpg)
+--
 ![Screenshot 4](screenshots/Employee%20Management%20System_page-0004.jpg)
+--
 ![Screenshot 5](screenshots/Employee%20Management%20System_page-0005.jpg)
+--
 ![Screenshot 6](screenshots/Employee%20Management%20System_page-0006.jpg)
+--
 ![Screenshot 7](screenshots/Employee%20Management%20System_page-0007.jpg)
 
 ---
