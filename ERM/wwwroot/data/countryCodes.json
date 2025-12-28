@@ -1,0 +1,102 @@
+[
+  {
+    "country": "Afghanistan",
+    "code": "+93",
+    "iso": "AF"
+  },
+  {
+    "country": "Australia",
+    "code": "+61",
+    "iso": "AU"
+  },
+  {
+    "country": "Bangladesh",
+    "code": "+880",
+    "iso": "BD"
+  },
+  {
+    "country": "Brazil",
+    "code": "+55",
+    "iso": "BR"
+  },
+  {
+    "country": "Canada",
+    "code": "+1",
+    "iso": "CA"
+  },
+  {
+    "country": "China",
+    "code": "+86",
+    "iso": "CN"
+  },
+  {
+    "country": "France",
+    "code": "+33",
+    "iso": "FR"
+  },
+  {
+    "country": "Germany",
+    "code": "+49",
+    "iso": "DE"
+  },
+  {
+    "country": "India",
+    "code": "+91",
+    "iso": "IN"
+  },
+  {
+    "country": "Indonesia",
+    "code": "+62",
+    "iso": "ID"
+  },
+  {
+    "country": "Italy",
+    "code": "+39",
+    "iso": "IT"
+  },
+  {
+    "country": "Japan",
+    "code": "+81",
+    "iso": "JP"
+  },
+  {
+    "country": "Mexico",
+    "code": "+52",
+    "iso": "MX"
+  },
+  {
+    "country": "Nepal",
+    "code": "+977",
+    "iso": "NP"
+  },
+  {
+    "country": "Pakistan",
+    "code": "+92",
+    "iso": "PK"
+  },
+  {
+    "country": "Russia",
+    "code": "+7",
+    "iso": "RU"
+  },
+  {
+    "country": "Saudi Arabia",
+    "code": "+966",
+    "iso": "SA"
+  },
+  {
+    "country": "Singapore",
+    "code": "+65",
+    "iso": "SG"
+  },
+  {
+    "country": "United Kingdom",
+    "code": "+44",
+    "iso": "GB"
+  },
+  {
+    "country": "United States",
+    "code": "+1",
+    "iso": "US"
+  }
+]

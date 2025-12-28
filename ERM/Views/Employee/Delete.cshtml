@@ -1,0 +1,158 @@
+﻿@model Organization.DataModels.Employee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h2 class="text-center text-danger mb-4">Delete Employee</h2>
+
+<div class="card shadow-lg border-danger rounded-3 p-4 bg-light text-black fw-bold">
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-md-4 text-center mb-3">
+            <img src="@(string.IsNullOrEmpty(Model?.ProfilePicture)
+                                      ? Url.Content("~/img/blank-profile.png")
+                                      : Model.ProfilePicture)"
+                 alt="Profile Picture"
+                 class="rounded-circle border border-secondary shadow-sm mb-3"
+                 style="width: 150px; height: 150px; object-fit: cover;" />
+
+            <h4 class="fw-bold text-primary">
+                @($"{Model.FirstName} {Model.MiddleName} {Model.LastName}".Trim())
+            </h4>
+            <p class="text-muted">@Model.Email</p>
+        </div>
+
+
+        <!-- Info Section -->
+        <div class="col-md-8">
+            <table class="table table-borderless table-sm">
+                <tbody>
+                    <tr>
+                        <th width="30%">Father's Name:</th>
+                        <td>@Model.FatherName</td>
+                    </tr>
+                    <tr>
+                        <th>Gender:</th>
+                        <td>@Model.Gender</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth:</th>
+                        <td>@(Model.DOB.HasValue? Model.DOB.Value.ToString("dd MMM yyyy") : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Joining:</th>
+                        <td>@(Model.DOJ.HasValue? Model.DOJ.Value.ToString("dd MMM yyyy") : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Contract Expiry:</th>
+                        <td>@(Model.DOE.HasValue? Model.DOE.Value.ToString("dd MMM yyyy") : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>@Model.FullPhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Salary:</th>
+                        <td>@Model.Salary.ToString()</td>
+                    </tr>
+                    <tr>
+                        <th>Description:</th>
+                        <td>@(string.IsNullOrEmpty(Model.Description) ? "No remarks available." : Model.Description)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation -->
+    <form asp-action="Delete" method="post" class="mt-4">
+        <input type="hidden" asp-for="Id" />
+        <div class="alert alert-danger d-flex justify-content-between align-items-center">
+            <span class="fw-bold">Are you sure you want to delete this employee?</span>
+            <div>
+                
+                <button type="submit" class="btn btn-danger px-4">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary px-4 me-2">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            function adjustDeleteLayout() {
+                var width = $(window).width();
+
+                if (width <= 480) {
+                    // Mobile view
+                    $(".card").css({
+                        "margin-left": "0.5rem",
+                        "margin-right": "0.5rem",
+                        "padding": "1rem"
+                    });
+
+                    $("h2").css("font-size", "1.3rem");
+                    $("h4").css("font-size", "1rem");
+                    $("th, td").css("font-size", "0.85rem");
+                    $(".btn").css({
+                        "font-size": "0.85rem",
+                        "padding": "0.4rem 0.8rem"
+                    });
+                    $("img.rounded-circle").css({
+                        "width": "90px",
+                        "height": "90px"
+                    });
+
+                    $(".alert").css({
+                        "flex-direction": "column",
+                        "text-align": "center"
+                    });
+
+                    $(".alert div").css({
+                        "margin-top": "10px"
+                    });
+                }
+                else if (width <= 768) {
+                    // Tablet view
+                    $(".card").css({
+                        "margin-left": "1rem",
+                        "margin-right": "1rem",
+                        "padding": "1.5rem"
+                    });
+
+                    $("h2").css("font-size", "1.5rem");
+                    $("th, td").css("font-size", "0.9rem");
+                    $("img.rounded-circle").css({
+                        "width": "110px",
+                        "height": "110px"
+                    });
+                }
+                else {
+                    // Desktop view
+                    $(".card").css({
+                        "margin-left": "2rem",
+                        "margin-right": "2rem",
+                        "padding": "2rem"
+                    });
+
+                    $("h2").css("font-size", "1.8rem");
+                    $("th, td").css("font-size", "1rem");
+                    $("img.rounded-circle").css({
+                        "width": "150px",
+                        "height": "150px"
+                    });
+                }
+            }
+
+            // Run on page load
+            adjustDeleteLayout();
+
+            // Run on window resize
+            $(window).resize(function () {
+                adjustDeleteLayout();
+            });
+        });
+    </script>
+}

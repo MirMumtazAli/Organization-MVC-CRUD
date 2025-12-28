@@ -1,0 +1,131 @@
+﻿@model Organization.DataModels.Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h2 class="text-center mb-4 text-primary fw-bold">Employee Details</h2>
+
+<div class="card shadow-lg rounded-3 p-3 p-md-4 bg-light text-black fw-bold">
+
+    <div class="row g-3">
+        <!-- Profile Picture -->
+        <div class="col-12 col-md-4 text-center">
+            <img src="@(string.IsNullOrEmpty(Model?.ProfilePicture)
+                                                      ? Url.Content("~/img/blank-profile.png")
+                                                      : Model.ProfilePicture)"
+                 alt="Profile Picture"
+                 class="profile-img rounded-circle border border-2 border-dark mb-2"
+                 style="width:120px;height:120px;object-fit:cover;cursor:pointer;"
+                 data-bs-toggle="modal" data-bs-target="#photoModal" />
+
+            <h4 class="fw-bold text-dark mt-2">
+                @($"{Model.FirstName} {Model.MiddleName} {Model.LastName}".Trim())
+            </h4>
+            <p class="text-muted">@Model.Email</p>
+        </div>
+
+        <!-- Employee Info Table -->
+        <div class="col-12 col-md-8">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <tbody>
+                        <tr>
+                            <th>Employee Name:</th>
+                            <td>@($"{Model.FirstName} {(string.IsNullOrWhiteSpace(Model.MiddleName) ? "" : Model.MiddleName + " ")}{Model.LastName}")</td>
+                        </tr>
+                        <tr>
+                            <th>Father's Name:</th>
+                            <td>@Model.FatherName</td>
+                        </tr>
+                        <tr>
+                            <th>Gender:</th>
+                            <td>@Model.Gender</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth:</th>
+                            <td>@Model.DOB?.ToString("dd MMM yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Joining:</th>
+                            <td>@Model.DOJ?.ToString("dd MMM yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Contract Expiry:</th>
+                            <td>@(Model.DOE?.ToString("dd MMM yyyy") ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Salary:</th>
+                            <td>@Model.Salary.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number:</th>
+                            <td>@Model.FullPhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <th>Description:</th>
+                            <td>@(string.IsNullOrEmpty(Model.Description) ? "No remarks available." : Model.Description)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="mt-4">
+        <h5 class="fw-bold text-dark">Uploaded Documents</h5>
+        <hr />
+        <div class="d-flex flex-wrap gap-2">
+            @if (!string.IsNullOrEmpty(Model.Document1))
+            {
+                <a href="@Model.Document1" target="_blank" class="btn btn-outline-primary btn-sm">View Document 1</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document2))
+            {
+                <a href="@Model.Document2" target="_blank" class="btn btn-outline-primary btn-sm">View Document 2</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document3))
+            {
+                <a href="@Model.Document3" target="_blank" class="btn btn-outline-primary btn-sm">View Document 3</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document4))
+            {
+                <a href="@Model.Document4" target="_blank" class="btn btn-outline-primary btn-sm">View Document 4</a>
+            }
+            @if (string.IsNullOrEmpty(Model.Document1) && string.IsNullOrEmpty(Model.Document2) && string.IsNullOrEmpty(Model.Document3) && string.IsNullOrEmpty(Model.Document4))
+            {
+                <p class="text-muted">No documents uploaded.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-4 d-flex flex-column flex-md-row gap-2 justify-content-between">
+        
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-100 w-md-auto">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-outline-primary w-100 w-md-auto">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal fade" id="photoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-body text-center p-0">
+                <img src="@(string.IsNullOrEmpty(Model?.ProfilePicture) ? Url.Content("~/img/blank-profile.png") : Model.ProfilePicture)"
+                     alt="Profile Picture Large"
+                     class="img-fluid rounded-circle"
+                     style="max-width: 300px; height: 300px; object-fit: cover;" />
+            </div>
+        </div>
+    </div>
+</div>

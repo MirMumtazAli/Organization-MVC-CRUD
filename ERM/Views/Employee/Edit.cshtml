@@ -1,0 +1,423 @@
+﻿@model Organization.DataModels.Employee
+
+@{
+    ViewData["Title"] = "Edit employee";
+}
+
+<h2 class="text-center mb-4">Edit employee Information</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="p-4 shadow-lg rounded bg-light text-black fw-bold">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group mb-3 d-flex align-items-center gap-3">
+        <!-- Profile Picture Preview (Left) -->
+        <div>
+            <label class="form-label fw-bold d-block mb-2">Profile Picture</label>
+            <img id="profilePreview"
+                 src="@(
+                 !string.IsNullOrEmpty(Model?.TempProfilePicture) ? Model.TempProfilePicture :
+                 !string.IsNullOrEmpty(Model?.ProfilePicture) ? Model.ProfilePicture :
+                 Url.Content("~/img/blank-profile.png")
+                            )"
+                 alt="Profile Picture"
+                 style="width:120px; height:120px; object-fit:cover; border-radius:50%;" />
+
+            <!-- Hidden field to keep old preview/Base64 -->
+            <input type="hidden" asp-for="TempProfilePicture" value="@Model?.TempProfilePicture" />
+        </div>
+
+        <!-- File Upload Input (Right) -->
+        <div class="flex-grow-1">
+            <label for="ProfilePicture" class="form-label fw-bold d-block mb-2">&nbsp;</label>
+            <input type="file"
+                   id="ProfilePicture"
+                   name="ProfilePicture"
+                   accept="image/*"
+                   class="form-control bg-light text-dark btn-outline-dark border-gray"
+                   style="width:500px;"
+                   onchange="validateAndPreviewProfilePicture(this);" />
+            <br />
+            <span id="fileSizeError" class="text-danger"></span>
+            <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+        </div>
+    </div>
+
+
+<!-- employee Name Fields -->
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="FirstName" class="form-label fw-bold">
+            @Html.DisplayNameFor(m => m.FirstName) <span class="text-danger">*</span>
+        </label>
+        <input asp-for="FirstName" class="form-control bg-light text-dark btn-outline-dark border-gray" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label asp-for="MiddleName" class="form-label fw-bold">
+            @Html.DisplayNameFor(m => m.MiddleName)
+        </label>
+        <input asp-for="MiddleName" class="form-control bg-light text-dark btn-outline-dark border-gray" />
+        <span asp-validation-for="MiddleName" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label asp-for="LastName" class="form-label fw-bold">
+            @Html.DisplayNameFor(m => m.LastName) <span class="text-danger">*</span>
+        </label>
+        <input asp-for="LastName" class="form-control bg-light text-dark btn-outline-dark border-gray" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+</div>
+
+
+
+<!-- Father Name -->
+<div class="mb-3">
+    <label asp-for="FatherName" class="form-label fw-bold">Father Name <span class="text-danger">*</span></label>
+    <input asp-for="FatherName" class="form-control bg-light text-dark btn-outline-dark border-gray" style="width: 500px" />
+    <span asp-validation-for="FatherName" class="text-danger"></span>
+</div>
+
+<!-- Gender -->
+<div class="mb-3">
+    <label asp-for="Gender" class="form-label fw-bold">Gender <span class="text-danger">*</span></label>
+        <select asp-for="Gender" class="form-select bg-light text-dark btn-outline-dark border-gray"
+                style="width: 400px;">
+        <option value="">-- Select Gender --</option>
+        <option value="Male" selected="@(Model.Gender == "Male")">Male</option>
+        <option value="Female" selected="@(Model.Gender == "Female")">Female</option>
+    </select>
+    <span asp-validation-for="Gender" class="text-danger"></span>
+</div>
+
+    <!-- Dates Row: DOB, DOJ, DOE -->
+    <div class="row mb-3">
+        <!-- DOB -->
+        <div class="col-md-4 d-flex flex-column">
+            <label asp-for="DOB" class="form-label fw-bold">
+                @Html.DisplayNameFor(m => m.DOB) <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input asp-for="DOB" id="dobPicker" type="text"
+                       class="form-control bg-light text-dark btn-outline-dark border-gray"
+                       placeholder="yyyy-mm-dd" autocomplete="off" />
+                
+            </div>
+            <span id="dobError" class="text-danger"></span>
+            <span asp-validation-for="DOB" class="text-danger mt-1"></span>
+        </div>
+
+        <!-- DOJ -->
+        <div class="col-md-4 d-flex flex-column">
+            <label asp-for="DOJ" class="form-label fw-bold">
+                @Html.DisplayNameFor(m => m.DOJ) <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input asp-for="DOJ" id="dojPicker" type="text"
+                       class="form-control bg-light text-dark btn-outline-dark border-gray"
+                       placeholder="yyyy-mm-dd" autocomplete="off" />
+                
+            </div>
+            <span asp-validation-for="DOJ" class="text-danger mt-1"></span>
+        </div>
+
+        <!-- DOE -->
+        <div class="col-md-4 d-flex flex-column">
+            <label asp-for="DOE" class="form-label fw-bold">
+                @Html.DisplayNameFor(m => m.DOE)
+            </label>
+            <div class="input-group">
+                <input asp-for="DOE" id="doePicker" type="text"
+                       class="form-control bg-light text-dark btn-outline-dark border-gray"
+                       placeholder="yyyy-mm-dd" autocomplete="off" />
+                
+            </div>
+            <span asp-validation-for="DOE" class="text-danger mt-1"></span>
+        </div>
+    </div>
+
+
+<!-- Email -->
+<div class="mb-3">
+    <label asp-for="Email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+        <input asp-for="Email" class="form-control bg-light text-dark btn-outline-dark border-gray"
+               style="width: 400px;" type="email" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<!-- Salary -->
+<div class="mb-3">
+    <label asp-for="Salary" class="form-label fw-bold">Salary <span class="text-danger">*</span></label>
+        <input asp-for="Salary" class="form-control bg-light text-dark btn-outline-dark border-gray"
+               style="width: 400px;" type="number" step="0.01" />
+    <span asp-validation-for="Salary" class="text-danger"></span>
+</div>
+
+<!-- Phone Number -->
+    <div class="form-group mb-3" >
+    <label asp-for="PhoneNumber" class="form-label fw-bold me-2" style="width: 150px;">
+        @Html.DisplayNameFor(m => m.PhoneNumber) <span class="text-danger">*</span>
+    </label>
+
+        <div class="d-flex align-items-center" style=" gap: 15px;">
+        <select asp-for="CountryCode"
+                class="form-select bg-light text-dark btn-outline-dark border-gray"   
+                asp-items="@(ViewBag.CountryCodes as List<SelectListItem>)"
+                style="width: 300px;">
+            <option value="">Select</option>
+        </select>
+        
+        <input asp-for="PhoneNumber"
+                class="form-control bg-light text-dark btn-outline-dark border-gray"
+                placeholder="Enter phone number"
+                style="width: 300px;" />
+    </div>
+
+    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+</div>
+
+
+
+<!-- Description -->
+<div class="mb-3">
+    <label asp-for="Description" class="form-label fw-bold">Description</label>
+        <textarea asp-for="Description" class="form-control bg-light text-dark btn-outline-dark border-gray"
+                  style="width: 100%" rows="3"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<!-- Documents Section -->
+<div class="mb-4">
+    <label class="form-label fw-bold">Existing Documents</label><br />
+
+    @if (!string.IsNullOrEmpty(Model.Document1) || !string.IsNullOrEmpty(Model.Document2)
+            || !string.IsNullOrEmpty(Model.Document3) || !string.IsNullOrEmpty(Model.Document4))
+    {
+        <div>
+            @if (!string.IsNullOrEmpty(Model.Document1))
+            {
+                <a href="@Model.Document1" target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">Document 1</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document2))
+            {
+                <a href="@Model.Document2" target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">Document 2</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document3))
+            {
+                <a href="@Model.Document3" target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">Document 3</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.Document4))
+            {
+                <a href="@Model.Document4" target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">Document 4</a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No documents uploaded.</p>
+    }
+
+    <label class="form-label fw-bold mt-3">Upload New Documents (Max 4)</label>
+        <input type="file" name="Documents" class="form-control bg-light text-dark btn-outline-dark border-gray"
+               style="width: 400px;" multiple accept=".pdf,.doc,.docx,.jpg,.png" />
+</div>
+
+<!-- Buttons -->
+<div class="d-flex justify-content-between mt-4">
+   
+    <button type="submit" class="btn btn-success px-4">Update</button>
+        <a asp-action="Index" class="btn btn-outline-dark px-4">Back</a>
+</div>
+</form>
+
+@section Scripts {
+    <script>
+        function validateAndPreviewProfilePicture(input) {
+            const file = input.files[0];
+            const preview = document.getElementById("profilePreview");
+            const errorSpan = document.getElementById("fileSizeError");
+            const oldImage = preview.src; // store old image before change
+            const maxSize = 100 * 1024; // 150 KB
+            const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+            // Clear previous error
+            errorSpan.textContent = "";
+
+            // If no file selected → restore old image
+            if (!file) {
+                preview.src = oldImage;
+                return;
+            }
+
+            // ✅ Size validation
+            if (file.size > maxSize) {
+                errorSpan.textContent = "Profile picture must be less than 100 KB.";
+                input.value = ""; // clear file input
+                preview.src = oldImage;
+                return;
+            }
+
+            // ✅ File type validation
+            if (!validTypes.includes(file.type)) {
+                errorSpan.textContent = "Only JPG or PNG images are allowed.";
+                input.value = "";
+                preview.src = oldImage;
+                return;
+            }
+
+            // ✅ Show live preview for valid image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        
+        function validateAndPreviewProfilePicture(input) {
+            const file = input.files[0];
+            const preview = document.getElementById("profilePreview");
+            const errorSpan = document.getElementById("fileSizeError");
+            const oldImage = preview.src; // store old image before change
+            const maxSize = 150 * 1024; // 150 KB
+            const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+            // Clear previous error
+            errorSpan.textContent = "";
+
+            if (!file) {
+                preview.src = oldImage;
+                return;
+            }
+
+            if (file.size > maxSize) {
+                errorSpan.textContent = "Profile picture must be less than 150 KB.";
+                input.value = "";
+                preview.src = oldImage;
+                return;
+            }
+
+            if (!validTypes.includes(file.type)) {
+                errorSpan.textContent = "Only JPG or PNG images are allowed.";
+                input.value = "";
+                preview.src = oldImage;
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $(document).ready(function () {
+                // Initialize datepickers
+                $('#dobPicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true,
+                    endDate: new Date() // DOB cannot be future
+                });
+
+                $('#dojPicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+                $('#doePicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+                // Open datepicker on calendar icon click
+                $('.input-group-text').click(function () {
+                    $(this).siblings('input').datepicker('show');
+                });
+            });
+
+        //DOB age validation
+        $('#dobPicker').on('change', function () {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+
+            const errorSpan = $('#dobError');
+
+            if (age < 18) {
+                errorSpan.text("Employee must be at least 18 years old.");
+                this.value = ""; // clear invalid input
+            } else {
+                errorSpan.text(""); // clear error
+            }
+        });
+   
+            
+          
+        $(document).ready(function () {
+
+            // Responsive styling for mobile screens
+            function makeFormResponsive() {
+                if ($(window).width() < 768) {
+
+                    // Make all inputs and selects full width
+                    $(".form-control, .form-select").css({
+                        "width": "100%",
+                        "font-size": "1.05rem",
+                        "margin-bottom": "10px"
+                    });
+
+                    // Make container full screen width
+                    $("form").css({
+                        "padding": "15px",
+                        "margin": "0",
+                        "border-radius": "0",
+                        "box-shadow": "none"
+                    });
+
+                    // Stack elements vertically
+                    $(".row, .d-flex").css({
+                        "flex-direction": "column",
+                        "align-items": "stretch"
+                    });
+
+                    // Enlarge labels for readability
+                    $("label").css({
+                        "font-size": "1rem"
+                    });
+
+                    // Center buttons and make wider
+                    $(".btn").css({
+                        "font-size": "1rem",
+                        "padding": "10px 20px",
+                        "width": "100%",
+                        "margin-bottom": "10px"
+                    });
+                    $(".d-flex.justify-content-between").css("flex-direction", "column");
+                }
+                else {
+                    // Reset to normal for desktop
+                    $(".form-control, .form-select").css("width", "");
+                    $("form").css({ "padding": "", "margin": "", "border-radius": "", "box-shadow": "" });
+                    $(".row, .d-flex").css({ "flex-direction": "", "align-items": "" });
+                    $("label").css("font-size", "");
+                    $(".btn").css({ "font-size": "", "width": "", "margin-bottom": "" });
+                }
+            }
+
+            // Run on load and resize
+            makeFormResponsive();
+            $(window).on("resize", makeFormResponsive);
+        });
+          
+        
+
+    </script>
+
+}

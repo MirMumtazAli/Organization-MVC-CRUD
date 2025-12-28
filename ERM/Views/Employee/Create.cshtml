@@ -1,0 +1,233 @@
+﻿@model Organization.DataModels.Employee
+
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<h2 class="text-center mb-4">Add New Employee</h2>
+
+<div class="container">
+    <form asp-action="Create" method="post" enctype="multipart/form-data"
+          class="">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- Profile Picture + Upload -->
+        <div class="row mb-4 align-items-start">
+            <div class="col-12 col-md-3 text-center mb-3 mb-md-0">
+                <label class="form-label fw-bold d-block mb-2">Profile Picture</label>
+                <img id="profilePreview"
+                     src="@(
+                     !string.IsNullOrEmpty(Model?.TempProfilePicture) ? Model.TempProfilePicture :
+                     !string.IsNullOrEmpty(Model?.ProfilePicture) ? Model.ProfilePicture :
+                     Url.Content("~/img/blank-profile.png")
+                                  )"
+                     alt="Profile Picture"
+                     class="img-fluid rounded-circle border"
+                     style="width: 120px; height: 120px; object-fit: cover;" />
+                <input type="hidden" asp-for="TempProfilePicture" />
+            </div>
+
+            <div class="col-12 col-md-5">
+                <input type="file" id="ProfilePicture" name="ProfilePicture" accept="image/*"
+                       class="form-control border-3 border-dark-subtle"
+                       onchange="validateAndPreviewProfilePicture(this);" />
+                <br />
+
+                <span id="fileSizeError" class="text-danger d-block"></span>
+                <span asp-validation-for="ProfilePicture" class="text-danger d-block"></span>
+            </div>
+        </div>
+
+        <!-- Name Fields -->
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-4">
+                <label asp-for="FirstName" class="form-label fw-bold">First Name <span class="text-danger">*</span></label>
+                <input asp-for="FirstName" class="form-control border-3 border-dark-subtle" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-4">
+                <label asp-for="MiddleName" class="form-label fw-bold">Middle Name</label>
+                <input asp-for="MiddleName" class="form-control border-3 border-dark-subtle" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-4">
+                <label asp-for="LastName" class="form-label fw-bold">Last Name <span class="text-danger">*</span></label>
+                <input asp-for="LastName" class="form-control border-3 border-dark-subtle" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Father's Name -->
+        <div class="mb-3">
+            <label asp-for="FatherName" class="form-label fw-bold">Father's Name <span class="text-danger" >*</span></label>
+            <input asp-for="FatherName" class="form-control border-3 border-dark-subtle" style="width:350px" />
+            <span asp-validation-for="FatherName" class="text-danger"></span>
+        </div>
+
+        <!-- Gender -->
+        <div class="mb-3">
+            <label asp-for="Gender" class="form-label fw-bold">Gender <span class="text-danger">*</span></label>
+            <select asp-for="Gender" class="form-select border-3 border-dark-subtle" style="width:250px">
+                <option value="">-- Select Gender --</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <!-- Dates -->
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-4">
+                <label asp-for="DOB" class="form-label fw-bold">Date of Birth <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input asp-for="DOB" id="dobPicker" type="text" class="form-control border-3 border-dark-subtle" placeholder="yyyy-mm-dd" autocomplete="off" />
+                </div>
+                <span asp-validation-for="DOB" class="text-danger"></span><br />
+                <span id="dobError" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label asp-for="DOJ" class="form-label fw-bold">Date of Joining <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input asp-for="DOJ" id="dojPicker" type="text" class="form-control border-3 border-dark-subtle" placeholder="yyyy-mm-dd" autocomplete="off" />
+                </div>
+                <span asp-validation-for="DOJ" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label asp-for="DOE" class="form-label fw-bold">Contract Expiry</label>
+                <div class="input-group">
+                    <input asp-for="DOE" id="doePicker" type="text" class="form-control border-3 border-dark-subtle" placeholder="yyyy-mm-dd" autocomplete="off" />
+                </div>
+                <span asp-validation-for="DOE" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+            <input asp-for="Email" class="form-control bg-light text-dark btn-outline-dark border-gray"
+                   style="width: 400px;" type="email" />
+            <br />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <!-- Salary -->
+        <div class="mb-3">
+            <label asp-for="Salary" class="form-label fw-bold">Salary <span class="text-danger">*</span></label>
+            <input asp-for="Salary" class="form-control bg-light text-dark btn-outline-dark border-gray"
+                   style="width: 400px;" type="number" step="0.01" />
+            <span asp-validation-for="Salary" class="text-danger"></span>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
+            <div class="row g-2">
+                <div class="col-4 col-md-3">
+                    <select asp-for="CountryCode" id="CountryCodeDropdown" class="form-select border-3 border-dark-subtle">
+                        <option value="">Country Code</option>
+                    </select>
+                    <span asp-validation-for="CountryCode" class="text-danger d-block"></span>
+                </div>
+                <div class="col-8 col-md-9">
+                    <input asp-for="PhoneNumber" class="form-control border-3 border-dark-subtle" placeholder="Enter phone number" style="width:250px" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger d-block"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description --> 
+        <div class="mb-3"> 
+            <label asp-for="Description" class="form-label fw-bold">Description</label> 
+            <textarea asp-for="Description" rows="3" class="form-control border-3 border-dark-subtle"></textarea> 
+            <span asp-validation-for="Description" class="text-danger"></span> 
+        </div> 
+            
+        <!-- Documents --> 
+        <div class="mb-3"> 
+            <label class="form-label fw-bold">Upload Documents (Max 4) <span class="text-danger">*</span></label> 
+            <input type="file" name="Documents" multiple accept=".pdf,.doc,.docx,.jpg,.png" class="form-control border-3 border-dark-subtle" /> 
+            <input type="hidden" id="ExistingDocuments" name="ExistingDocuments" /> 
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-action="Index" class="btn btn-outline-primary">Back</a>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    function validateAndPreviewProfilePicture(input) {
+        const file = input.files[0];
+        const preview = document.getElementById('profilePreview');
+        const errorSpan = document.getElementById('fileSizeError');
+        errorSpan.textContent = "";
+
+        if (file) {
+            const maxSize = 100 * 1024; // 150 KB
+            if (file.size > maxSize) {
+                errorSpan.textContent = "Profile picture must be less than 100 KB.";
+                input.value = "";
+                preview.src = "@Url.Content("~/img/blank-profile.png")";
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => preview.src = e.target.result;
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const savedCode = "@(Model?.CountryCode ?? "")";
+        const dropdown = document.getElementById("CountryCodeDropdown");
+
+        fetch("/data/countryCodes.json")
+            .then(res => res.json())
+            .then(countries => {
+                dropdown.innerHTML = '<option value="">-- Code --</option>';
+                countries.forEach(c => {
+                    const option = document.createElement("option");
+                    option.value = c.code;
+                    option.textContent = `${c.country} (${c.code})`;
+                    dropdown.appendChild(option);
+                });
+                if (savedCode) dropdown.value = savedCode;
+            });
+    });
+
+    $(function () {
+        $('#dobPicker, #dojPicker, #doePicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('#dobPicker').on('change', function () {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+
+            const errorSpan = $('#dobError');
+            if (age < 18) {
+                errorSpan.text("Employee must be at least 18 years old.");
+                this.value = "";
+            } else {
+                errorSpan.text("");
+            }
+        });
+
+        $('.input-group-text').click(function () {
+            $(this).siblings('input').datepicker('show');
+        });
+    });
+       
+
+</script>
+}

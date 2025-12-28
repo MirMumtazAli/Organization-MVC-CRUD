@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Organization.DataModels.Employee>
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+
+<link href="~/css/datatables.min.css" rel="stylesheet" />
+<script src="~/js/datatables.min.js"></script>
+
+<h2 class="text-center mb-4">Employees List</h2>
+
+<div class="table-responsive">
+    <table id="employeeTable" class="table table-bordered table-striped table-hover align-middle shadow-sm text-black fw-bold w-100">
+        <thead class="table-dark text-center">
+            <tr>
+                <th class="text-center">Profile</th>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-primary">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var employee in Model)
+                {
+                    <tr data-id="@employee.Id">
+                        <!-- Profile -->
+                        <td class="text-center">
+                            <span style="display:none">@employee.FirstName @employee.LastName</span>
+                            <img src="@(string.IsNullOrEmpty(employee?.ProfilePicture)
+                                                                         ? Url.Content("~/img/blank-profile.png")
+                                                                         : employee.ProfilePicture)"
+                         alt="Profile"
+                         class="profile-img border border-2 border-dark mb-2"
+                         style="width:70px;height:70px;border-radius:50%;object-fit:cover;cursor:pointer;"
+                         data-bs-toggle="modal" data-bs-target="#photoModal-@employee.Id" />
+                </td>
+
+                        <!-- Name -->
+                        <td class="text-center">
+                            @($"{employee.FirstName} {(string.IsNullOrWhiteSpace(employee.MiddleName) ? "" : employee.MiddleName + " ")}{employee.LastName}")
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center">
+                            <span style="display:none">Actions</span>
+                            <div class="d-flex flex-column flex-md-row justify-content-center">
+                                <a href="/Employee/Details/@employee.Id" class="btn btn-info btn-sm m-1">View</a>
+                                <a href="/Employee/Edit/@employee.Id" class="btn btn-warning btn-sm m-1">Edit</a>
+                                <a href="/Employee/Delete/@employee.Id" class="btn btn-danger btn-sm m-1">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Profile Modal (outside td) -->
+                    <div class="modal fade" id="photoModal-@employee.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content bg-transparent border-0 shadow-none">
+                                <div class="modal-body text-center p-0">
+                                    <img src="@(string.IsNullOrEmpty(employee?.ProfilePicture)
+                                                                                     ? Url.Content("~/img/blank-profile.png")
+                                                                                     : employee.ProfilePicture)"
+                                 alt="Large Profile"
+                                 class="img-fluid rounded-circle"
+                                 style="max-width: 300px; height: 300px; object-fit: cover;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No employees found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#employeeTable').DataTable({
+                responsive: true,
+                autoWidth: true,
+                pageLength: 5,
+                searching: true,    // search box
+                ordering: true,     // column sorting
+                lengthChange: true, // page length dropdown
+                columnDefs: [
+                    { orderable: false, targets: [0, 2] } // disable sorting on Profile & Actions
+                ]
+            });
+        });
+    </script>
+}
