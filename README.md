@@ -1,6 +1,6 @@
 # 🏢 Organization CRUD MVC (Employee Management System)
 
-An **Employee Management System (EMS)** developed using **ASP.NET Core MVC** that helps organizations manage employee data efficiently through a clean and structured CRUD-based application.
+![Screenshot 1](screenshots/Employee%20Management%20System_page-0001.jpg)
 
 ---
 
@@ -25,9 +25,14 @@ An **Employee Management System (EMS)** developed using **ASP.NET Core MVC** tha
 - **Razor Views**
 
 ---
-## 📄 Project Documentation
+## 🖼️ Project Screenshots
 
-[📘 View Employee Management System (EMS) PDF](docs/Employee Management System.pdf)
+![Screenshot 2](screenshots/Employee%20Management%20System_page-0002.jpg)
+![Screenshot 3](screenshots/Employee%20Management%20System_page-0003.jpg)
+![Screenshot 4](screenshots/Employee%20Management%20System_page-0004.jpg)
+![Screenshot 5](screenshots/Employee%20Management%20System_page-0005.jpg)
+![Screenshot 6](screenshots/Employee%20Management%20System_page-0006.jpg)
+![Screenshot 7](screenshots/Employee%20Management%20System_page-0007.jpg)
 
 ---
 ## 🧩 Project Structure
@@ -46,5 +51,3 @@ This project is designed for learning and demonstrating:
 - CRUD operations  
 - Database integration with EF Core  
 - Structured backend development  
-
----
